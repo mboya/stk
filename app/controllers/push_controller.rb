@@ -19,6 +19,9 @@ class PushController < ApplicationController
   end
 
   def callback
+    merchantrequestID = params[:Body][:stkCallback][:MerchantRequestID]
+    checkoutrequestID = params[:Body][:stkCallback][:CheckoutRequestID]
+
     amount,mpesareceiptnumber,transactiondate,phonenumber=nil
     params[:Body][:stkCallback][:CallbackMetadata][:Item].each do |item|
       case item[:Name].downcase
@@ -32,8 +35,8 @@ class PushController < ApplicationController
         phonenumber = item[:Value]
       end
     end
-
-    pay = Payment.find_by(amount: amount, phone_number: phonenumber)
+    
+    pay = Payment.find_by(amount: amount, phone_number: phonenumber, CheckoutRequestID: checkoutrequestID, MerchantRequestID: merchantrequestID)
     pay.state = true
     pay.code = mpesareceiptnumber
     pay.save

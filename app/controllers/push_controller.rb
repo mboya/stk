@@ -33,8 +33,6 @@ class PushController < ApplicationController
       end
     end
 
-    binding.pry
-
     pay = Payment.find_by(amount: amount, phone_number: phonenumber)
     pay.state = true
     pay.code = mpesareceiptnumber

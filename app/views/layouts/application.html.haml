@@ -1,0 +1,22 @@
+!!!
+%html
+  %head
+    %meta{:content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
+    %title Stk
+    = csrf_meta_tags
+    = csp_meta_tag
+    = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload'
+    = javascript_include_tag 'application', 'data-turbolinks-track': 'reload'
+  %body
+    .ui.grid
+      .four.wide.column
+        - flash.each do |key, value|
+          - if key == ("success")
+            .ui.positive.message{style: 'margin-top: 2em; margin-left: 2em;'}
+              %p
+                = value
+          - else
+            .ui.negative.message{style: 'margin-top: 2em; margin-left: 2em;'}
+              %p
+                = value
+    = yield

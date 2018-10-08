@@ -23,27 +23,32 @@ class PushController < ApplicationController
     checkoutrequestID = params[:Body][:stkCallback][:CheckoutRequestID]
 
     amount,mpesareceiptnumber,transactiondate,phonenumber=nil
-    params[:Body][:stkCallback][:CallbackMetadata][:Item].each do |item|
-      case item[:Name].downcase
-      when 'amount'
-        amount = item[:Value]
-      when 'mpesareceiptnumber'
-        mpesareceiptnumber = item[:Value]
-      when 'transactiondate'
-        transactiondate = item[:Value]
-      when 'phonenumber'
-        phonenumber = item[:Value]
+    if params[:CallbackMetada].present?
+      params[:Body][:stkCallback][:CallbackMetadata][:Item].each do |item|
+        case item[:Name].downcase
+        when 'amount'
+          amount = item[:Value]
+        when 'mpesareceiptnumber'
+          mpesareceiptnumber = item[:Value]
+        when 'transactiondate'
+          transactiondate = item[:Value]
+        when 'phonenumber'
+          phonenumber = item[:Value]
+        end
       end
+
+      pay = Payment.find_by(amount: amount, phone_number: phonenumber, CheckoutRequestID: checkoutrequestID, MerchantRequestID: merchantrequestID)
+      pay.state = true
+      pay.code = mpesareceiptnumber
+      pay.save
+
+      render json: 'received'
+    else
+      pay = Payment.find_by(CheckoutRequestID: checkoutrequestID, MerchantRequestID: merchantrequestID)
+      pay.code = params["Body"]["stkCallback"]["ResultDesc"]
+      pay.save
     end
-    
-    pay = Payment.find_by(amount: amount, phone_number: phonenumber, CheckoutRequestID: checkoutrequestID, MerchantRequestID: merchantrequestID)
-    pay.state = true
-    pay.code = mpesareceiptnumber
-    pay.save
-
-    Transaction.create({ callback: params })
-
-    render json: 'received'
+  Transaction.create({ callback: params })
   end
 
 end

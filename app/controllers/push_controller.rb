@@ -23,7 +23,7 @@ class PushController < ApplicationController
     checkoutrequestID = params[:Body][:stkCallback][:CheckoutRequestID]
 
     amount,mpesareceiptnumber,transactiondate,phonenumber=nil
-    if params[:CallbackMetada].present?
+    if params[:Body][:stkCallback][:CallbackMetadata].present?
       params[:Body][:stkCallback][:CallbackMetadata][:Item].each do |item|
         case item[:Name].downcase
         when 'amount'

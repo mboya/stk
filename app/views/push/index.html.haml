@@ -1,0 +1,37 @@
+.ui.grid{style: "margin: 2em;"}
+  .four.wide.column
+    = form_tag payment_path, :class => 'ui form' do
+      .field
+        %label Amount
+        = number_field(:user, :amount, in: 5..200, step: 1)
+      .field
+        %label Phone Number
+        = telephone_field(:user, :phone_number)
+      = submit_tag 'Push Payment', class: 'ui button'
+
+    %br
+    .ui.negative.message
+      .ui.header Note
+      %p All Green Transactions will be rolled back at midnight by 
+      %b SafCom 
+      since this runs on sandbox
+
+  .twelve.wide.column
+    %table.ui.celled.table
+      %thead
+        %tr
+          %th Amount
+          %th Phone
+          %th State
+          %th Code
+      %tbody
+        - @payments.each do |pay|
+          %tr
+            %td 
+              =pay.amount
+            %td 
+              =pay.phone_number
+            %td
+              =pay.state
+            %td 
+              =pay.code

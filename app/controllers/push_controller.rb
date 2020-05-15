@@ -1,6 +1,6 @@
 class PushController < ApplicationController
   def index
-    @payments = Payment.all
+    @payments = Payment.all.order(created_at: :desc)
   end
 
   def payment

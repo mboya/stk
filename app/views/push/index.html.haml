@@ -3,7 +3,7 @@
     = form_tag payment_path, :class => 'ui form' do
       .field
         %label Amount
-        = number_field(:user, :amount, in: 5..200, step: 1)
+        = number_field(:user, :amount, in: 5..2000, step: 1)
       .field
         %label Phone Number
         = telephone_field(:user, :phone_number)

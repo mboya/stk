@@ -51,4 +51,12 @@ class PushController < ApplicationController
   Transaction.create({ callback: params })
   end
 
+  def till_validation
+    render json: 'ok'
+  end
+
+  def till_confirmation
+    render json: 'ok'
+  end
+
 end
